@@ -58,7 +58,7 @@ def lidar():
 
 def generate_launch_description():
     
-    return LaunchDescription(
+    return LaunchDescription([
         camera_host_arg,
         lidar_host_arg, 
         imu_serial_arg, 
@@ -66,5 +66,5 @@ def generate_launch_description():
         imu(),
         gps(),
         lidar(),
-    )
+    ])
     
