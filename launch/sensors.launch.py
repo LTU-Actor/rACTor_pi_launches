@@ -6,6 +6,7 @@ from launch.actions import DeclareLaunchArgument, LogInfo, IncludeLaunchDescript
 from launch.substitutions import LaunchConfiguration, TextSubstitution
 from launch_ros.actions import Node, SetParameter
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 import os
 
 camera_host_arg = DeclareLaunchArgument('camera_hostname', default_value='192.168.0.9')
@@ -40,19 +41,19 @@ def imu():
 def gps():
     return IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('ublox_gps'), "ublox_gps_node-launch.py")
+            os.path.join(get_package_share_directory('ublox_gps'), "launch/ublox_gps_node-launch.py")
         ),
     )
 
 def lidar():
     return IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('control_tower_ros2'), "control_tower.launch.py")
+        XMLLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('ouster_ros'), "launch/sensor.launch.xml")
         ),
         launch_arguments = {
             'sensor_hostname' : LaunchConfiguration("lidar_hostname"),
-            'attempt_reconnect' : True,
-            'viz': False,
+            'attempt_reconnect' : "true",
+            'viz': "false",
         }.items(),
     )
 
