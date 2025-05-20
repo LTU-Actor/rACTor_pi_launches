@@ -11,7 +11,7 @@ import os
 
 camera_host_arg = DeclareLaunchArgument('camera_hostname', default_value='192.168.0.9')
 lidar_host_arg = DeclareLaunchArgument('lidar_hostname', default_value='192.168.0.10')
-imu_serial_arg = DeclareLaunchArgument('imu_port', default_value='/dev/ttyUSB0')
+imu_serial_arg = DeclareLaunchArgument('imu_serial_port', default_value='/dev/ttyUSB0')
 
 # not needed
 # gps_serial_arg = DeclareLaunchArgument('gps_port', default_value='/dev/ttyACM0')
@@ -33,9 +33,10 @@ def imu():
         executable='imu_driver_exe',
         name='imu_driver_exe',
         parameters=[
-            {"port_name": LaunchConfiguration("imu_port")}
+            {"port_name": LaunchConfiguration("imu_serial_port")}
         ],
         respawn=True,
+        output="log",
     )
     
 def gps():
@@ -54,6 +55,14 @@ def lidar():
             'sensor_hostname' : LaunchConfiguration("lidar_hostname"),
             'attempt_reconnect' : "true",
             'viz': "false",
+            'sensor_frame': "3d_lidar_link",
+            'lidar_frame': "3d_lidar_link",
+            'imu_frame': "3d_lidar_link",
+            'point_cloud_frame': "3d_lidar_link",
+            'pub_static_tf': "false",
+            'min_range': "0.3",
+            'max_range': "50.0",
+            'timestamp_mode': "TIME_FROM_ROS_TIME",
         }.items(),
     )
 
